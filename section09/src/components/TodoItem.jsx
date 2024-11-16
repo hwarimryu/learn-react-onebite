@@ -1,13 +1,13 @@
 import "./TodoItem.css"
 
-const TodoItem = ({id, isDone, content, date}) => {
-    const onChange = () => {
-
+const TodoItem = ({id, isDone, content, date, onUpdate}) => {
+    const onChangeCheckbox = () => {
+        onUpdate(id)
     }
     
     return(
         <div className="TodoItem">
-            <input checked={isDone} onChange={onChange} type = "checkbox" />
+            <input checked={isDone} onChange={onChangeCheckbox} type = "checkbox" />
             <div className="content">{content}</div>
             <div className="date">{new Date(date).toLocaleDateString()}</div>
             <button>삭제</button>
