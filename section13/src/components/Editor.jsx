@@ -1,3 +1,4 @@
+import { useContext, useState } from 'react'
 import './Editor.css'
 import EmotionItem from './EmotionItem'
 import Button from './Button'
@@ -25,21 +26,48 @@ const emotionList = [
     },
 ]
 
-const Editor = () => {
-    const emotionId = 1;
+const getStringedDate = (targetDate) => {
+    let year = targetDate.getFullYear();
+    let month = targetDate.getMonth() + 1;
+    let date = targetDate.getDate();
+
+    if(month < 10)
+        month = `0${month}`
+
+    if(date < 10)
+        date = `0${date}`
+
+    return `${year}-${month}-${date}`;
+}
+
+const Editor = ({onSubmit}) => {
+    // const [data, dispatch] = useReducer(reducer, mockData);
+
+    const [input, setInput] = useState({
+        createdDate: new Date(),
+        emotionId: 3,
+        content: "",
+    });
+
+    const onClickSubmit = () => {
+        onSubmit(input);
+    }
 
     return (
     <div className='Editor'>
         <section className='date_section'>
             <h4>오늘의 날짜</h4>
-            <input type='date'/>
+            <input 
+            value={getStringedDate(input.createdDate)} 
+            type='date'
+            />
         </section>
         <section className='emotion_section'>
             <h4>오늘의 감정</h4>
             <div className='emotion_list_wrapper'>
                 {emotionList.map((item) => <EmotionItem key= {item.emotionId} 
                 {...item}
-                isSelected={item.emotionId === emotionId}
+                isSelected={item.emotionId === input.emotionId}
                 />)}
             </div>
         </section>
@@ -49,7 +77,7 @@ const Editor = () => {
         </section>
         <section className='button_section'>
             <Button text={'취소하기'}/>
-            <Button text={'작성완료'} type={'POSITIVE'}/>
+            <Button text={'작성완료'} type={'POSITIVE'} onSubmit={onClickSubmit} />
         </section>
     </div>
     )
